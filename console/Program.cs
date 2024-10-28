@@ -1,72 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+
 
 namespace LegacySystem
 {
     class MainSistema
     {
+        private const int ClienteJoaoId = 1;
+        private const int ClienteMariaId = 2;
+
+        private const decimal TransacaoCompraProdutoValor = 100.50m;
+        private const decimal TransacaoCompraServicoValor = 200.00m;
+        private const decimal TransacaoCompraSoftwareValor = 300.75m;
+
         static void Main(string[] args)
         {
-            SistemaCliente sc = new SistemaCliente();
-            sc.AddCliente(1, "Joao", "joao@email.com");
-            sc.AddCliente(2, "Maria", "maria@email.com");
+            var sistemaCliente = new SistemaCliente();
+            AdicionarClientes(sistemaCliente);
 
-            SistemaTransacoes st = new SistemaTransacoes();
-            st.AdicionarTransacao(1, 100.50m, "Compra de Produto");
-            st.AdicionarTransacao(2, 200.00m, "Compra de Serviço");
-            st.AdicionarTransacao(3, 300.75m, "Compra de Software");
+            var sistemaTransacoes = new SistemaTransacoes();
+            AdicionarTransacoes(sistemaTransacoes);
 
-            sc.ExibirTodosOsClientes();
-            st.ExibirTransacoes();
+            ExibirInformacoes(sistemaCliente, sistemaTransacoes);
 
-            sc.removerCliente(1);
-            sc.ExibirTodosOsClientes();
+            sistemaCliente.RemoverCliente(ClienteJoaoId);
+            sistemaCliente.ExibirTodosOsClientes();
 
-            sc.AtualizarNomeCliente(2, "Maria Silva");
+            sistemaCliente.AtualizarNomeCliente(ClienteMariaId, "Maria Silva");
 
-            string nomeEmpresa = "Empresa Teste";
-            string descricaoTransacao = "Compra de Insumo";
+            var relatorio = new Relatorio();
+            relatorio.GerarRelatorioCliente(sistemaCliente.Clientes);
 
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
+            ExibirSomaValoresExemplo();
+        }
 
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
+        #region Métodos de Inicialização
 
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
+        private static void AdicionarClientes(SistemaCliente sistemaCliente)
+        {
+            sistemaCliente.AdicionarCliente(ClienteJoaoId, "João", "joao@email.com");
+            sistemaCliente.AdicionarCliente(ClienteMariaId, "Maria", "maria@email.com");
+        }
 
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
+        private static void AdicionarTransacoes(SistemaTransacoes sistemaTransacoes)
+        {
+            sistemaTransacoes.AdicionarTransacao(1, TransacaoCompraProdutoValor, "Compra de Produto");
+            sistemaTransacoes.AdicionarTransacao(2, TransacaoCompraServicoValor, "Compra de Serviço");
+            sistemaTransacoes.AdicionarTransacao(3, TransacaoCompraSoftwareValor, "Compra de Software");
+        }
 
-            Relatorio relatorio = new Relatorio();
-            relatorio.GerarRelatorioCliente(sc.clientes);
-            relatorio.GerarRelatorioClienteDuplicado(sc.clientes);
+        #endregion
 
+        private static void ExibirInformacoes(SistemaCliente sistemaCliente, SistemaTransacoes sistemaTransacoes)
+        {
+            sistemaCliente.ExibirTodosOsClientes();
+            sistemaTransacoes.ExibirTransacoes();
+        }
+
+        private static void ExibirSomaValoresExemplo()
+        {
             int soma = 0;
             for (int i = 0; i < 10; i++)
             {
-                //Soma mais 1
                 soma += i;
             }
 
             Console.WriteLine("Soma total: " + soma);
-
-            int somaDuplicada = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                //Soma Duplicada
-                somaDuplicada += i;
-            }
         }
     }
 }
